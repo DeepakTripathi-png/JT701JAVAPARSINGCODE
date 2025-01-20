@@ -26,10 +26,14 @@ public class commServer11000D {
   }  
   
   class ConnectionHandler implements Runnable {
+
+
     private Socket receivedSocketConn1;
     ConnectionHandler(Socket receivedSocketConn1) {
       this.receivedSocketConn1=receivedSocketConn1;
 	}
+
+
      Date connCreated = null;
      String deviceID=null,reportType=null,dateTime=null,dateTimer = null,gpsDateTimer=null,latitude=null,longitude=null,BB=null,deviceVolt=null,chksum=null,serialKey=null;
      
@@ -67,7 +71,7 @@ public class commServer11000D {
 			 
 			while (true) {	
 			
-				byte startByte = r.readByte() ;
+				byte startByte = r.readByte();
 				System.out.println(" startByte is hex : 0x" + Integer.toHexString(startByte));
 				String fullmessage = "24";
 				if(startByte==0x24){
@@ -84,9 +88,7 @@ public class commServer11000D {
 					  
 					byte devicendataType = r.readByte();
 					System.out.println("devicendataType:" + Integer.toHexString(devicendataType));
-					//Device type
 					int deviceType = devicendataType >> 4;
-					//data type
 					int dataType = devicendataType & 0b00001111;
 					fullmessage=fullmessage+" "+Integer.toHexString(devicendataType & 0xff);
 
@@ -96,19 +98,16 @@ public class commServer11000D {
 
 					byte[] dateByte = new byte[3];
 					r.readFully(dateByte);
-					//System.out.println(" deviceID is : 0x" + deviceID);
 					System.out.println(" dateByte is hex : 0x" + bytesToHex(dateByte));
 					fullmessage=fullmessage+" "+bytesToHex(dateByte);
 
 					byte[] timeByte = new byte[3];
 					r.readFully(timeByte);
-					//System.out.println(" deviceID is : 0x" + deviceID);
 					System.out.println(" timeByte is hex : 0x" + bytesToHex(timeByte));
 					fullmessage=fullmessage+" "+bytesToHex(timeByte);
 
 					byte[] latitudeByte = new byte[4];
 					r.readFully(latitudeByte);
-					//System.out.println(" deviceID is : 0x" + deviceID);
 					System.out.println(" latitudeByte is hex : 0x" + bytesToHex(latitudeByte));
 					fullmessage=fullmessage+" "+bytesToHex(latitudeByte);
 					String latitudeString = bytesToHex(latitudeByte);
@@ -131,7 +130,6 @@ public class commServer11000D {
 
 					byte[] longitudeByte = new byte[5];
 					r.readFully(longitudeByte);
-					//System.out.println(" deviceID is : 0x" + deviceID);
 					System.out.println(" longitudeByte is hex : 0x" + bytesToHex(longitudeByte));
 					fullmessage=fullmessage+" "+bytesToHex(longitudeByte);
 					String longitudeString = bytesToHex(longitudeByte);
@@ -157,8 +155,7 @@ public class commServer11000D {
 					int intlocationIndicator = Integer.parseInt(locationIndicator, 16);
 
 					System.out.println("Converted intlocationIndicator number is : " + intlocationIndicator);
-
-					//Converting hexa decimal number to binary in Java       
+     
 					String binarylocationIndicator = Integer.toBinaryString(intlocationIndicator);
 
 					System.out.printf("Hexadecimal locationIndicator to Binary conversion of %s is %s %n", locationIndicator, binarylocationIndicator );
@@ -179,12 +176,10 @@ public class commServer11000D {
 					  latitdueDegreeFloat=-1*latitdueDegreeFloat;
 					}
 
-					//byte speedByte = r.readByte() ;
 					int speedByte = r.readUnsignedByte();
 					System.out.println(" speedByte is hex : 0x" + Integer.toHexString(speedByte));
 					fullmessage=fullmessage+" "+String.format("%02X", speedByte);
 
-					//byte directionByte = r.readByte() ;
 					int directionByte = r.readUnsignedByte();
 					System.out.println(" directionByte is hex : 0x" + Integer.toHexString(directionByte));
 					fullmessage=fullmessage+" "+String.format("%02X", directionByte);
@@ -227,7 +222,6 @@ public class commServer11000D {
 					String unauthorizedRFIDAlarm =  binaryDeviceStatus.substring(5,6);
 					String wrongpassAlarm =  binaryDeviceStatus.substring(6,7);
 					String unlockingAlarm =  binaryDeviceStatus.substring(7,8);
-
 					String motorlockStatus =  binaryDeviceStatus.substring(8,9);
 					String steelstringStatus =  binaryDeviceStatus.substring(9,10);
 					String tobeconfirmed =  binaryDeviceStatus.substring(10,11);
@@ -237,8 +231,6 @@ public class commServer11000D {
 					String entergeofenceAlarm =  binaryDeviceStatus.substring(14,15);
 					String lbsStatus =  binaryDeviceStatus.substring(15,16);
 
-
-					//byte batByte = r.readByte() ;
 					int batByte = r.readUnsignedByte();
 					System.out.println(" batByte is hex : 0x" + Integer.toHexString(batByte));
 					fullmessage=fullmessage+" "+String.format("%02X", batByte);
@@ -598,6 +590,9 @@ public class commServer11000D {
     
    
    }
+
+
+
    public static void main(String[] args) {
       new commServer11000D();
    }
